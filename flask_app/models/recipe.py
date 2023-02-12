@@ -19,6 +19,7 @@ class Recipe:
 
     @staticmethod
     def validate_recipe(data):
+        print("Validating...")
         is_valid = True
 
         #name validation
@@ -55,6 +56,7 @@ class Recipe:
             flash("Cook time required", "under_30m")
             is_valid = False
 
+        print(f"is_valid = {is_valid}")
         return is_valid
         
     @classmethod
@@ -83,9 +85,33 @@ class Recipe:
         return recipes
     
     @classmethod
+    def get_one_by_id(cls, data):
+        query = '''
+            SELECT * 
+            FROM recipes
+            WHERE id = %(id)s;
+        '''
+        results = connectToMySQL(db).query_db(query, data)
+        return cls(results[0])
+
+    @classmethod
     def insert_recipe(cls, data):
         query = '''
             INSERT INTO recipes (name, description, instructions, date_cooked, cooktime_under_30m, user_id)
             VALUES (%(name)s, %(description)s, %(instructions)s, %(date_cooked)s, %(cooked_under_30m)s, %(user_id)s);
         '''
         return connectToMySQL(db).query_db(query, data)
+    
+    @classmethod
+    def update_recipe(cls, data):
+        query = '''
+            UPDATE recipes
+            SET name = %(name)s,
+                description = %(description)s,
+                instructions = %(instructions)s,
+                date_cooked = %(date_cooked)s,
+                cooktime_under_30m = %(cooked_under_30m)s,
+                user_id = %(user_id)s
+            WHERE id = %(id)s;
+        '''
+        connectToMySQL(db).query_db(query, data)

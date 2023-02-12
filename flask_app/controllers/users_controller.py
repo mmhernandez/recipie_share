@@ -18,7 +18,7 @@ def register():
     if user.User.validate_registration(registration_info):
         session.clear()
         session["id"] = user.User.insert(registration_info)
-        return redirect("/all_recipes")
+        return redirect("/recipes")
     else:
         session["first_name"] = registration_info["first_name"]
         session["last_name"] = registration_info["last_name"]
@@ -30,7 +30,7 @@ def login():
     if user.User.validate_login(request.form):
         logged_in_user = user.User.get_one_by_email({"email": request.form["email"]})
         session["id"] = logged_in_user.id
-        return redirect("/all_recipes")
+        return redirect("/recipes")
     return redirect("/")
 
 @app.route("/logout")
