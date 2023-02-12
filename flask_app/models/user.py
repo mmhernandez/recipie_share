@@ -1,4 +1,6 @@
+from flask_app.config.mysqlconnection import connectToMySQL
 
+db = "recipe_share"
 
 class User:
     def __init__(self, data):
