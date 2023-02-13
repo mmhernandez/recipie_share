@@ -74,3 +74,18 @@ def update_recipe(id):
         else:
             return redirect(f"/recipes/edit/{recipe_info['id']}")
     return redirect("/")
+
+@app.route("/recipes/delete/<int:id>")
+def delete_recipe(id):
+    if "id" in session:
+        recipe.Recipe.delete_recipe({"id": id})
+        return redirect("/recipes")
+    return redirect("/")
+
+@app.route("/recipes/<int:id>")
+def view_recipe(id):
+    if "id" in session:
+        logged_in_user_info = user.User.get_one_by_id({"id": session["id"]})
+        recipe_info = recipe.Recipe.get_one_by_id_with_creator({"id": id})
+        return render_template("view_recipe.html", user=logged_in_user_info, recipe=recipe_info)
+    return redirect("/")

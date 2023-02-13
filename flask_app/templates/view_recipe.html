@@ -8,6 +8,38 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-    
+    <div class="container d-flex justify-content-between mb-5">
+        <h1 class="container my-3">Welcome, {{user.first_name}}</h1>
+        <div class="d-flex gap-3 w-25 pt-5">
+            <a href="/recipes" class="me-4">back to recipe list</a>
+            <a href="/logout">logout</a>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-end mx-auto p-4 w-75">
+        <p class="fs-2">{{recipe.name}}</p>
+        <p>Posted by: {{recipe.creator.first_name}}</p>
+    </div>
+    <div class="container border mx-auto p-4 w-75 mb-5">
+        <div class="mb-3 d-flex">
+            <p class="w-25">Description:</p>
+            <p class="w-75">{{recipe.description}}</p>
+        </div>
+        <div class="mb-3 d-flex">
+            <p class="w-25">Under 30 minutes?</p>
+            {% if recipe.cooktime_under_30m == 0 %}
+                <p class="w-75">No</p>
+            {% else %}
+                <p class="w-75">Yes</p>
+            {% endif %}
+        </div>
+        <div class="mb-3 d-flex">
+            <p class="w-25">Instructions:</p>
+            <p class="w-75">{{recipe.instructions}}</p>
+        </div>
+        <div class="mb-3 d-flex">
+            <p class="w-25">Date Made:</p>
+            <p class="w-75">{{recipe.date_cooked}}</p>
+        </div>
+    </div>
 </body>
 </html>

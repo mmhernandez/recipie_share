@@ -93,6 +93,29 @@ class Recipe:
         '''
         results = connectToMySQL(db).query_db(query, data)
         return cls(results[0])
+    
+    @classmethod
+    def get_one_by_id_with_creator(cls, data):
+        query = '''
+            SELECT * 
+            FROM recipes R
+            LEFT JOIN users U ON U.id = R.user_id
+            WHERE R.id = %(id)s;
+        '''
+        results = connectToMySQL(db).query_db(query, data)
+        recipe_data = cls(results[0])
+        for row in results:
+            user_info = {
+                "id": row["U.id"],
+                "first_name": row["first_name"],
+                "last_name": row["last_name"],
+                "email": row["email"],
+                "password": row["password"],
+                "created_at": row["U.created_at"],
+                "updated_at": row["U.updated_at"]
+            }
+            recipe_data.creator = user.User(user_info)
+        return recipe_data
 
     @classmethod
     def insert_recipe(cls, data):
@@ -112,6 +135,14 @@ class Recipe:
                 date_cooked = %(date_cooked)s,
                 cooktime_under_30m = %(cooked_under_30m)s,
                 user_id = %(user_id)s
+            WHERE id = %(id)s;
+        '''
+        connectToMySQL(db).query_db(query, data)
+
+    @classmethod
+    def delete_recipe(cls, data):
+        query = '''
+            DELETE FROM recipes
             WHERE id = %(id)s;
         '''
         connectToMySQL(db).query_db(query, data)
